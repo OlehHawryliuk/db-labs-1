@@ -1,17 +1,13 @@
---1)Вивести загальну ціну курсів де кількість лекцій в заданому проміжку
+--1)Р’РёРІРµСЃС‚Рё СЃСѓРјР°СЂРЅС– С†С–РЅРё РїРѕ РїСЂРµРґРјРµС‚Р°Рј
 SELECT
-    COUNT(udemy.id) AS "summary price",
-    course.price
+    sum(course.price) AS "summary price",
+    subject.subject
 FROM
     udemy
-    INNER JOIN info ON info.course_id = udemy.id
-    INNER JOIN course ON course.id = udemy.course_id
-WHERE
-    info.lectures_num < 25
-GROUP BY
-    course.price;
+    INNER JOIN subject ON udemy.subject = subject.subject
+    INNER JOIN course ON course.id = udemy.course_id group by subject.subject;
 
---2)Вивести процентне співвідношеня курсів за рівнем
+--2)Р’РёРІРµСЃС‚Рё РїСЂРѕС†РµРЅС‚РЅРµ СЃРїС–РІРІС–РґРЅРѕС€РµРЅСЏ РєСѓСЂСЃС–РІ Р·Р° СЂС–РІРЅРµРј
 
 SELECT
     COUNT(udemy.id) AS "count courses",
@@ -22,13 +18,17 @@ FROM
 GROUP BY
     info.level_name;
 
---3)Вивести динаміку цін бізнесових курсів
+--3)Р’РёРІРµСЃС‚Рё РґС–РЅР°РјС–РєСѓ С†С–РЅ РєСѓСЂСЃС–РІ Р·Р° РєС–Р»СЊРєС–СЃС‚СЋ Р»РµРєС†С–Р№ Сѓ РєСѓСЂСЃС–РІ Р·РІ'СЏР·Р°РЅРёС… Р· Р±С–Р·РЅРµСЃРѕРј
 
 SELECT
+DISTINCT info.lectures_num,
     course.price
 FROM
     udemy
+    INNER JOIN course ON course.id = udemy.course_id 
+    INNER JOIN info ON info.course_id = course.id
     INNER JOIN subject ON udemy.subject = subject.subject
-    INNER JOIN course ON course.id = udemy.course_id
-    where subject.subject = 'busines';
+   where subject.subject = 'busines';
+    
+
     
